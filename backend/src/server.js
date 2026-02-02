@@ -9,6 +9,7 @@ import messageRoutes from "./routes/message.route.js";
 
 const app = express();
 const __dirname = path.resolve();
+
 app.use(express.json()); // req.body
 app.use(cookieParser());
 
