@@ -4,13 +4,17 @@ import { generateToken } from "../lib/utils.js";
 
 export const signup = async (req, res) => {
   const { fullname, email, password } = req.body;
+  const name = typeof fullname === "string" ? fullname.trim() : "";
+  const normalizedEmail =
+    typeof email === "string" ? email.trim().toLowerCase() : "";
+  const pwd = typeof password === "string" ? password : "";
 
   try {
-    if (!fullname || !email || !password) {
+    if (!name || !normalizedEmail || !pwd) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    if (password.length < 6) {
+    if (pwd.length < 6) {
       return res
         .status(400)
         .json({ message: "Password must be at least 6 characters long." });
@@ -18,33 +22,33 @@ export const signup = async (req, res) => {
 
     //check if emails valid: regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(normalizedEmail)) {
       return res.status(400).json({ message: "Invalid email address." });
     }
 
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: normalizedEmail });
     if (user) {
       return res.status(400).json({ message: "Email already in use." });
     }
 
     // 123456 => $#$#*)8dkfj_
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(pwd, salt);
 
     const newUser = new User({
-      fullname,
-      email,
+      fullname: name,
+      email: normalizedEmail,
       password: hashedPassword,
     });
 
     if (newUser) {
-      generateToken(newUser._id, res);
-      await newUser.save();
+      const savedUser = await newUser.save();
+      generateToken(savedUser._id, res);
 
       res.status(201).json({
-        _id: newUser._id,
-        fullname: newUser.fullname,
-        email: newUser.email,
+        _id: savedUser._id,
+        fullname: savedUser.fullname,
+        email: savedUser.email,
         profilePic: newUser.profilePic,
       });
 
