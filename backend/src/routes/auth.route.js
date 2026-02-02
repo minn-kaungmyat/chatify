@@ -6,11 +6,16 @@ import {
   updateProfile,
 } from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
-import { arjectProtection } from "../middleware/arject.middleware.js";
+import { arcjetProtection } from "../middleware/arcjet.middleware.js";
+import { ENV } from "../lib/env.js";
 
 const router = express.Router();
 
-router.use(arjectProtection);
+router.use(
+  ENV.NODE_ENV === "development"
+    ? (req, res, next) => next()
+    : arcjetProtection,
+);
 
 router.post("/signup", signup);
 router.post("/login", login);
