@@ -23,5 +23,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.10.1",
     "resend": "^6.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.2",
+    "eslint-plugin-node": "^11.1.0"
   }
 }
