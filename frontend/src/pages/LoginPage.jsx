@@ -1,19 +1,12 @@
 import React from "react";
-import { useAuthStore } from "../store/useAuthStore.js";
+// import { useAuthStore } from "../store/useAuthStore.js";
 
 function LoginPage() {
-  const { authUser, login, isLoggedIn } = useAuthStore();
+  // const { authUser } = useAuthStore();
 
-  console.log("LoginPage - Auth User:", authUser);
-  console.log("LoginPage - Is Logged In:", isLoggedIn);
-  return (
-    <button
-      className=" z-10"
-      onClick={() => login({ name: "Jane", _id: 456, age: 30 })}
-    >
-      Login
-    </button>
-  );
+  // console.log("LoginPage - Auth User:", authUser);
+  // console.log("LoginPage - Is Logged In:", isLoggedIn);
+  return <div className="text-white text-3xl">Login Page</div>;
 }
 
 export default LoginPage;
