@@ -1,0 +1,49 @@
+import { create } from "zustand";
+import { axiosInstance } from "../lib/axios.js";
+import toast from "react-hot-toast";
+
+export const useChatStore = create((set, get) => ({
+  allContacts: [],
+  chats: [],
+  messages: [],
+  activeTab: "chats", // 'chats' or 'contacts'
+  selectedUser: null,
+  isUsersLoading: false,
+  isChatsLoading: false,
+  isSoundEnabled: localStorage.getItem("isSoundEnabled") === "true",
+
+  toggleSound: () => {
+    localStorage.setItem("isSoundEnabled", !get().isSoundEnabled);
+    set({ isSoundEnabled: !get().isSoundEnabled });
+  },
+
+  setActiveTab: (tab) => set({ activeTab: tab }),
+
+  setSelectedUser: (user) => set({ selectedUser: user }),
+
+  getAllContacts: async () => {
+    set({ isUsersLoading: true });
+    try {
+      const response = await axiosInstance.get("/messages/contacts");
+      set({ allContacts: response.data });
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
+      toast.error(error.response?.data?.message || "Failed to load contacts.");
+    } finally {
+      set({ isUsersLoading: false });
+    }
+  },
+
+  getMyChatPartners: async () => {
+    set({ isChatsLoading: true });
+    try {
+      const response = await axiosInstance.get("/messages/chats");
+      set({ chats: response.data });
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+      toast.error(error.response?.data?.message || "Failed to load chats.");
+    } finally {
+      set({ isChatsLoading: false });
+    }
+  },
+}));
