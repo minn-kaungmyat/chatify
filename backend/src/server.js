@@ -4,11 +4,11 @@ import { connectDB } from "./lib/db.js";
 import { ENV } from "./lib/env.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { server, app } from "./lib/socket.js";
 
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 
-const app = express();
 const __dirname = path.resolve();
 
 app.use(express.json({ limit: "10mb" })); // req.body
@@ -34,7 +34,7 @@ if (ENV.NODE_ENV === "production") {
 
 const PORT = ENV.PORT || 3000;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 
   connectDB();
