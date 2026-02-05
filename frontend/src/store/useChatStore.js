@@ -99,4 +99,34 @@ export const useChatStore = create((set, get) => ({
       toast.error(error.response?.data?.message || "Failed to send message.");
     }
   },
+
+  subscribeToNewMessages: () => {
+    const { selectedUser } = get();
+    if (!selectedUser) return;
+
+    const socket = useAuthStore.getState().socket;
+
+    socket.on("newMessage", (newMessage) => {
+      const isMessageSentFromSelectedUser =
+        newMessage.senderId === selectedUser._id;
+      if (!isMessageSentFromSelectedUser) return;
+
+      const currentMessages = get().messages;
+      const currentIsSoundEnabled = get().isSoundEnabled;
+
+      set({ messages: [...currentMessages, newMessage] });
+      console.log(currentIsSoundEnabled, selectedUser.fullname);
+      if (currentIsSoundEnabled) {
+        const audio = new Audio("/sounds/notification.mp3");
+
+        audio.currentTime = 0;
+        audio.play();
+      }
+    });
+  },
+
+  unsubscribeFromNewMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    socket.off("newMessage");
+  },
 }));
