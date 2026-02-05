@@ -9,7 +9,7 @@ export const useChatStore = create((set, get) => ({
   activeTab: "chats", // 'chats' or 'contacts'
   selectedUser: null,
   isUsersLoading: false,
-  isChatsLoading: false,
+  isMessagesLoading: false,
   isSoundEnabled: JSON.parse(localStorage.getItem("isSoundEnabled")) === true,
 
   toggleSound: () => {
@@ -35,7 +35,7 @@ export const useChatStore = create((set, get) => ({
   },
 
   getMyChatPartners: async () => {
-    set({ isChatsLoading: true });
+    set({ isUsersLoading: true });
     try {
       const response = await axiosInstance.get("/messages/chats");
       set({ chats: response.data });
@@ -43,7 +43,20 @@ export const useChatStore = create((set, get) => ({
       console.error("Error fetching chats:", error);
       toast.error(error.response?.data?.message || "Failed to load chats.");
     } finally {
-      set({ isChatsLoading: false });
+      set({ isUsersLoading: false });
+    }
+  },
+
+  getMessagesByUserId: async (userId) => {
+    set({ isMessagesLoading: true });
+    try {
+      const response = await axiosInstance.get(`/messages/${userId}`);
+      set({ messages: response.data });
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      toast.error(error.response?.data?.message || "Failed to load messages.");
+    } finally {
+      set({ isMessagesLoading: false });
     }
   },
 }));
