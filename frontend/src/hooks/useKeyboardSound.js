@@ -9,8 +9,8 @@ const useKeyboardSound = () => {
   const playRandomKeyStrokeSound = () => {
     const randomSound =
       keyStrokeSounds[Math.floor(Math.random() * keyStrokeSounds.length)];
-
     const audio = new Audio(randomSound);
+    audio.currentTime = 0;
 
     audio.play().catch((error) => {
       console.error("Error playing sound:", error);
