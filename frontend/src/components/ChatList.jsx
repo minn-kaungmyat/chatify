@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useSearchParams } from "react-router";
 import { useChatStore } from "../store/useChatStore";
 import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
 import NoChatsFound from "./NoChatsFound";
@@ -8,6 +9,7 @@ function ChatList() {
   const { getMyChatPartners, chats, isUsersLoading, setSelectedUser } =
     useChatStore();
   const { onlineUsers } = useAuthStore();
+  const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     getMyChatPartners();
@@ -16,13 +18,22 @@ function ChatList() {
   if (isUsersLoading) return <UsersLoadingSkeleton />;
   if (chats.length === 0) return <NoChatsFound />;
 
+  const handleSelectUser = (chat) => {
+    setSelectedUser(chat);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("userId", chat._id);
+      return next;
+    });
+  };
+
   return (
     <>
       {chats.map((chat) => (
         <div
           key={chat._id}
           className="bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors"
-          onClick={() => setSelectedUser(chat)}
+          onClick={() => handleSelectUser(chat)}
         >
           <div className="flex items-center gap-3">
             <div

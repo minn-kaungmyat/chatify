@@ -1,23 +1,34 @@
 import { XIcon } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
+import { useSearchParams } from "react-router";
 
 function ChatHeader() {
   const { selectedUser, setSelectedUser } = useChatStore();
   const { onlineUsers } = useAuthStore();
   const isOnline = onlineUsers.includes(selectedUser._id);
+  const [, setSearchParams] = useSearchParams();
+
+  const handleClose = useCallback(() => {
+    setSelectedUser(null);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.delete("userId");
+      return next;
+    });
+  }, [setSelectedUser, setSearchParams]);
 
   useEffect(() => {
     const handleEscKey = (event) => {
-      if (event.key === "Escape") setSelectedUser(null);
+      if (event.key === "Escape") handleClose();
     };
 
     window.addEventListener("keydown", handleEscKey);
 
     // cleanup function
     return () => window.removeEventListener("keydown", handleEscKey);
-  }, [setSelectedUser]);
+  }, [handleClose]);
 
   return (
     <div
@@ -44,7 +55,7 @@ function ChatHeader() {
         </div>
       </div>
 
-      <button onClick={() => setSelectedUser(null)}>
+      <button onClick={handleClose}>
         <XIcon className="w-5 h-5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer" />
       </button>
     </div>

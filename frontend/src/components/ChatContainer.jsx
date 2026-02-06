@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import ChatHeader from "./ChatHeader";
@@ -16,11 +16,18 @@ function ChatContainer() {
     unsubscribeFromNewMessages,
   } = useChatStore();
   const { authUser } = useAuthStore();
+  const lastRequestedUserIdRef = useRef(null);
 
   useEffect(() => {
-    if (selectedUser) {
-      getMessagesByUserId(selectedUser._id);
+    if (!selectedUser) {
+      lastRequestedUserIdRef.current = null;
+      return;
     }
+
+    if (lastRequestedUserIdRef.current === selectedUser._id) return;
+
+    lastRequestedUserIdRef.current = selectedUser._id;
+    getMessagesByUserId(selectedUser._id);
   }, [selectedUser, getMessagesByUserId]);
 
   useEffect(() => {
@@ -32,9 +39,17 @@ function ChatContainer() {
   }, [messages]);
 
   useEffect(() => {
-    subscribeToNewMessages();
+    try {
+      subscribeToNewMessages();
+    } catch (error) {
+      console.error("Error subscribing to messages:", error);
+    }
     return () => {
-      unsubscribeFromNewMessages();
+      try {
+        unsubscribeFromNewMessages();
+      } catch (error) {
+        console.error("Error unsubscribing from messages:", error);
+      }
     };
   }, [subscribeToNewMessages, unsubscribeFromNewMessages]);
 

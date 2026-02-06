@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useSearchParams } from "react-router";
 import { useChatStore } from "../store/useChatStore";
 import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
 // import { useAuthStore } from "../store/useAuthStore";
@@ -6,6 +7,7 @@ import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
 function ContactsList() {
   const { getAllContacts, allContacts, setSelectedUser, isUsersLoading } =
     useChatStore();
+  const [, setSearchParams] = useSearchParams();
   // const { onlineUsers } = useAuthStore();
 
   useEffect(() => {
@@ -14,13 +16,22 @@ function ContactsList() {
 
   if (isUsersLoading) return <UsersLoadingSkeleton />;
 
+  const handleSelectUser = (contact) => {
+    setSelectedUser(contact);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("userId", contact._id);
+      return next;
+    });
+  };
+
   return (
     <>
       {allContacts.map((contact) => (
         <div
           key={contact._id}
           className="bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors"
-          onClick={() => setSelectedUser(contact)}
+          onClick={() => handleSelectUser(contact)}
         >
           <div className="flex items-center gap-3">
             <div
