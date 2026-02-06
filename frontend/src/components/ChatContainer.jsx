@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import ChatHeader from "./ChatHeader";
@@ -16,11 +16,18 @@ function ChatContainer() {
     unsubscribeFromNewMessages,
   } = useChatStore();
   const { authUser } = useAuthStore();
+  const lastRequestedUserIdRef = useRef(null);
 
   useEffect(() => {
-    if (selectedUser) {
-      getMessagesByUserId(selectedUser._id);
+    if (!selectedUser) {
+      lastRequestedUserIdRef.current = null;
+      return;
     }
+
+    if (lastRequestedUserIdRef.current === selectedUser._id) return;
+
+    lastRequestedUserIdRef.current = selectedUser._id;
+    getMessagesByUserId(selectedUser._id);
   }, [selectedUser, getMessagesByUserId]);
 
   useEffect(() => {
@@ -32,16 +39,27 @@ function ChatContainer() {
   }, [messages]);
 
   useEffect(() => {
-    subscribeToNewMessages();
+    try {
+      subscribeToNewMessages();
+    } catch (error) {
+      console.error("Error subscribing to messages:", error);
+    }
     return () => {
-      unsubscribeFromNewMessages();
+      try {
+        unsubscribeFromNewMessages();
+      } catch (error) {
+        console.error("Error unsubscribing from messages:", error);
+      }
     };
   }, [subscribeToNewMessages, unsubscribeFromNewMessages]);
 
   return (
     <>
       <ChatHeader />
-      <div id="chat-container" className="flex-1 px-6 overflow-y-auto py-8">
+      <div
+        id="chat-container"
+        className="flex-1 px-4 md:px-6 overflow-y-auto py-6 md:py-8"
+      >
         {messages.length > 0 && !isMessagesLoading ? (
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((msg) => (
@@ -50,7 +68,11 @@ function ChatContainer() {
                 className={`chat ${msg.senderId === authUser._id ? "chat-end" : "chat-start"}`}
               >
                 <div
-                  className={`chat-bubble relative ${msg.senderId === authUser._id ? "bg-cyan-600 text-white" : "bg-slate-800 text-slate-200"}`}
+                  className={`chat-bubble relative shadow-[0_18px_40px_-30px_rgba(8,14,30,0.9)] ${
+                    msg.senderId === authUser._id
+                      ? "bg-sky-600 text-white"
+                      : "bg-slate-800 text-slate-200"
+                  }`}
                 >
                   {msg.image && (
                     <img

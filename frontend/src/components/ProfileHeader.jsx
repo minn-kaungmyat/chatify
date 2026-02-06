@@ -37,13 +37,13 @@ function ProfileHeader() {
   };
 
   return (
-    <div className="p-6 border-b border-slate-700/50">
+    <div className="px-6 pt-6 pb-5 border-b border-slate-700/40">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* AVATAR */}
           <div className="avatar online">
             <button
-              className="size-14 rounded-full overflow-hidden relative group"
+              className="size-14 rounded-full overflow-hidden relative group ring-2 ring-slate-700/50"
               onClick={() => fileInputRef.current.click()}
               disabled={isUpdatingProfile}
             >
@@ -78,7 +78,7 @@ function ProfileHeader() {
 
           {/* USERNAME & ONLINE STATUS */}
           <div>
-            <h3 className="text-slate-200 font-medium text-base max-w-[180px] truncate">
+            <h3 className="text-slate-100 font-semibold text-base max-w-[180px] truncate">
               {authUser.fullname}
             </h3>
 
