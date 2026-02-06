@@ -30,18 +30,18 @@ function ContactsList() {
       {allContacts.map((contact) => (
         <div
           key={contact._id}
-          className="bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors"
+          className="soft-card p-4 cursor-pointer hover:border-sky-400/30 hover:bg-slate-900/60"
           onClick={() => handleSelectUser(contact)}
         >
           <div className="flex items-center gap-3">
             <div
             // className={`avatar ${onlineUsers.includes(contact._id) ? "online" : "offline"}`}
             >
-              <div className="size-12 rounded-full">
+              <div className="size-12 rounded-full ring-1 ring-slate-700/50">
                 <img src={contact.profilePic || "/avatar.png"} />
               </div>
             </div>
-            <h4 className="text-slate-200 font-medium">{contact.fullname}</h4>
+            <h4 className="text-slate-100 font-medium">{contact.fullname}</h4>
           </div>
         </div>
       ))}

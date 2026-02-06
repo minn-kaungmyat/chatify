@@ -50,9 +50,9 @@ function MessageInput() {
   };
 
   return (
-    <div className="p-4 border-t border-slate-700/50">
+    <div className="p-3 sm:p-4 border-t border-slate-700/40 bg-slate-900/30">
       {imagePreview && (
-        <div className="max-w-3xl mx-auto mb-3 flex items-center">
+        <div className="max-w-3xl mx-auto mb-3 flex items-center px-1">
           <div className="relative">
             <img
               src={imagePreview}
@@ -72,7 +72,7 @@ function MessageInput() {
 
       <form
         onSubmit={handleSendMessage}
-        className="max-w-3xl mx-auto flex space-x-4"
+        className="max-w-3xl mx-auto flex w-full items-center gap-2"
       >
         <input
           type="text"
@@ -82,7 +82,7 @@ function MessageInput() {
             isSoundEnabled && playRandomKeyStrokeSound();
           }}
           placeholder="Type your message..."
-          className="flex-1 bg-slate-800/50 border border-slate-700/50 rounded-lg  py-2 px-4"
+          className="chat-input min-w-0"
         />
 
         <input
@@ -96,8 +96,8 @@ function MessageInput() {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className={`bg-slate-800/50 text-slate-400 hover:text-slate-200 rounded-lg px-4 transition-colors ${
-            imagePreview ? "text-cyan-500" : ""
+          className={`shrink-0 bg-slate-900/60 border px-3 sm:px-4 py-3 border-slate-700/50 text-slate-400 hover:text-slate-200 rounded-xl transition-colors ${
+            imagePreview ? "text-sky-300 border-sky-400/30" : ""
           }`}
         >
           <ImageIcon className="w-5 h-5" />
@@ -106,7 +106,7 @@ function MessageInput() {
         <button
           type="submit"
           disabled={!text.trim() && !imagePreview}
-          className="bg-gradient-to-r from-cyan-500 to-cyan-600 text-white rounded-lg px-4 py-2 font-medium hover:from-cyan-600 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="shrink-0 bg-gradient-to-r from-sky-500 to-sky-600 text-white rounded-xl px-3 sm:px-4 py-3 font-medium hover:from-sky-600 hover:to-sky-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_12px_28px_-16px_rgba(59,130,246,0.7)]"
         >
           <SendIcon className="w-5 h-5" />
         </button>

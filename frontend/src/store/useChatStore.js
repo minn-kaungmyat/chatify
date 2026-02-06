@@ -7,6 +7,7 @@ export const useChatStore = create((set, get) => ({
   allContacts: [],
   chats: [],
   messages: [],
+  messagesUserId: null,
   activeTab: "chats", // 'chats' or 'contacts'
   selectedUser: null,
   isUsersLoading: false,
@@ -49,15 +50,18 @@ export const useChatStore = create((set, get) => ({
   },
 
   getMessagesByUserId: async (userId) => {
-    set({ isMessagesLoading: true });
+    set({ isMessagesLoading: true, messages: [], messagesUserId: userId });
     try {
       const response = await axiosInstance.get(`/messages/${userId}`);
+      if (get().selectedUser?._id !== userId) return;
       set({ messages: response.data });
     } catch (error) {
       console.error("Error fetching messages:", error);
       toast.error(error.response?.data?.message || "Failed to load messages.");
     } finally {
-      set({ isMessagesLoading: false });
+      if (get().selectedUser?._id === userId) {
+        set({ isMessagesLoading: false });
+      }
     }
   },
 
@@ -101,21 +105,22 @@ export const useChatStore = create((set, get) => ({
   },
 
   subscribeToNewMessages: () => {
-    const { selectedUser } = get();
-    if (!selectedUser) return;
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
 
-    const socket = useAuthStore?.getState()?.socket;
-
+    socket.off("newMessage");
     socket.on("newMessage", (newMessage) => {
+      const activeUserId = get().selectedUser?._id;
+      if (!activeUserId) return;
+
       const isMessageSentFromSelectedUser =
-        newMessage.senderId === selectedUser._id;
+        newMessage.senderId === activeUserId;
       if (!isMessageSentFromSelectedUser) return;
 
       const currentMessages = get().messages;
       const currentIsSoundEnabled = get().isSoundEnabled;
 
       set({ messages: [...currentMessages, newMessage] });
-      console.log(currentIsSoundEnabled, selectedUser.fullname);
       if (currentIsSoundEnabled) {
         const audio = new Audio("/sounds/notification.mp3");
 

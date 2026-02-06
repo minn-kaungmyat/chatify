@@ -39,26 +39,26 @@ function ChatPage() {
   return (
     <div
       className="relative w-full max-w-6xl"
-      style={{ height: "95vh", maxHeight: "800px", minHeight: "500px" }}
+      style={{ height: "95vh", maxHeight: "820px", minHeight: "520px" }}
     >
       <BorderAnimatedContainer>
         {/* LEFT SIDE  */}
         <div
-          className={`w-full md:w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col ${
+          className={`w-full md:w-[320px] glass-panel-muted backdrop-blur-xl flex flex-col ${
             selectedUser ? "hidden md:flex" : "flex"
           }`}
         >
           <ProfileHeader />
           <ActiveTabSwitch />
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          <div className="flex-1 overflow-y-auto px-4 pb-6 space-y-3">
             {activeTab === "chats" ? <ChatList /> : <ContactsList />}
           </div>
         </div>
 
         {/* RIGHT SIDE  */}
         <div
-          className={`w-full flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm ${
+          className={`w-full flex-1 flex flex-col glass-panel backdrop-blur-xl ${
             selectedUser ? "flex mobile-chat-slide-in" : "hidden md:flex"
           }`}
         >

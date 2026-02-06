@@ -6,8 +6,13 @@ import NoChatsFound from "./NoChatsFound";
 import { useAuthStore } from "../store/useAuthStore";
 
 function ChatList() {
-  const { getMyChatPartners, chats, isUsersLoading, setSelectedUser } =
-    useChatStore();
+  const {
+    getMyChatPartners,
+    chats,
+    isUsersLoading,
+    setSelectedUser,
+    selectedUser,
+  } = useChatStore();
   const { onlineUsers } = useAuthStore();
   const [, setSearchParams] = useSearchParams();
 
@@ -29,29 +34,44 @@ function ChatList() {
 
   return (
     <>
-      {chats.map((chat) => (
-        <div
-          key={chat._id}
-          className="bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors"
-          onClick={() => handleSelectUser(chat)}
-        >
-          <div className="flex items-center gap-3">
-            <div
-              className={`avatar ${onlineUsers.includes(chat._id) ? "online" : "offline"}`}
-            >
-              <div className="size-12 rounded-full">
-                <img
-                  src={chat.profilePic || "/avatar.png"}
-                  alt={chat.fullname}
-                />
+      {chats.map((chat) => {
+        console.log(chat._id === selectedUser?._id);
+        return (
+          <div
+            style={
+              selectedUser?._id === chat._id
+                ? {
+                    backgroundColor: "rgba(15, 23, 42, 0.7)",
+                    borderColor: "rgba(56, 189, 248, 0.5)",
+                  }
+                : {}
+            }
+            key={chat._id}
+            className={`soft-card p-4 cursor-pointer hover:border-sky-400/30 hover:bg-slate-900/60 ${
+              selectedUser?._id === chat._id
+                ? "border-sky-400/50 bg-slate-900/70"
+                : ""
+            }`}
+            onClick={() => handleSelectUser(chat)}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className={`avatar ${onlineUsers.includes(chat._id) ? "online" : "offline"}`}
+              >
+                <div className="size-12 rounded-full ring-1 ring-slate-700/50">
+                  <img
+                    src={chat.profilePic || "/avatar.png"}
+                    alt={chat.fullname}
+                  />
+                </div>
               </div>
+              <h4 className="text-slate-100 font-medium truncate">
+                {chat.fullname}
+              </h4>
             </div>
-            <h4 className="text-slate-200 font-medium truncate">
-              {chat.fullname}
-            </h4>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </>
   );
 }
