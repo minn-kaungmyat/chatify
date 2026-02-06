@@ -21,15 +21,15 @@ function LoginPage() {
     login(formData);
   };
   return (
-    <div className="w-full flex items-center justify-center p-4">
+    <div className="w-full flex items-center justify-center p-3 sm:p-4">
       <div className="relative w-full max-w-6xl md:h-[820px] h-[680px]">
         <BorderAnimatedContainer>
           <div className="w-full flex flex-col md:flex-row bg-slate-950/20">
             {/* FORM CLOUMN - LEFT SIDE */}
-            <div className="md:w-1/2 p-10 flex items-center justify-center md:border-r border-slate-700/30">
-              <div className="w-full max-w-md soft-card p-8">
+            <div className="md:w-1/2 p-4 sm:p-8 md:p-10 flex items-center justify-center md:border-r border-slate-700/30">
+              <div className="w-full max-w-md p-4 sm:p-6 md:p-8 sm:soft-card">
                 {/* HEADING TEXT */}
-                <div className="text-center mb-8">
+                <div className="text-center mb-6 sm:mb-8">
                   <MessageCircleIcon className="w-12 h-12 mx-auto text-slate-300 mb-4" />
                   <h2 className="text-2xl font-semibold text-slate-100 mb-2">
                     Welcome Back
@@ -38,7 +38,10 @@ function LoginPage() {
                 </div>
 
                 {/* FORM */}
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-5 sm:space-y-6"
+                >
                   {/* EMAIL INPUT */}
                   <div>
                     <label className="auth-input-label">Email</label>

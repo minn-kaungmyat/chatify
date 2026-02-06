@@ -32,7 +32,7 @@ function ChatHeader() {
   return (
     <div
       className="flex justify-between items-center bg-slate-900/50 border-b
-   border-slate-700/40 max-h-[84px] px-6 flex-1 backdrop-blur-xl"
+    border-slate-700/40 max-h-[84px] px-4 sm:px-6 flex-1 backdrop-blur-xl"
     >
       <div className="flex items-center space-x-3">
         <div className={`avatar ${isOnline ? "online" : "offline"}`}>

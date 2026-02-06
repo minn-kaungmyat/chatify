@@ -51,7 +51,7 @@ function ChatPage() {
           <ProfileHeader />
           <ActiveTabSwitch />
 
-          <div className="flex-1 overflow-y-auto px-4 pb-6 space-y-3">
+          <div className="flex-1 overflow-y-auto px-3 sm:px-4 pb-4 sm:pb-6 space-y-3">
             {activeTab === "chats" ? <ChatList /> : <ContactsList />}
           </div>
         </div>

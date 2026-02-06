@@ -50,7 +50,7 @@ function MessageInput() {
   };
 
   return (
-    <div className="p-3 sm:p-4 border-t border-slate-700/40 bg-slate-900/30">
+    <div className="p-2.5 sm:p-4 border-t border-slate-700/40 bg-slate-900/30">
       {imagePreview && (
         <div className="max-w-3xl mx-auto mb-3 flex items-center px-1">
           <div className="relative">
@@ -96,7 +96,7 @@ function MessageInput() {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className={`shrink-0 bg-slate-900/60 border px-3 sm:px-4 py-3 border-slate-700/50 text-slate-400 hover:text-slate-200 rounded-xl transition-colors ${
+          className={`shrink-0 bg-slate-900/60 border px-2.5 sm:px-4 py-3 border-slate-700/50 text-slate-400 hover:text-slate-200 rounded-xl transition-colors ${
             imagePreview ? "text-sky-300 border-sky-400/30" : ""
           }`}
         >
@@ -106,7 +106,7 @@ function MessageInput() {
         <button
           type="submit"
           disabled={!text.trim() && !imagePreview}
-          className="shrink-0 bg-gradient-to-r from-sky-500 to-sky-600 text-white rounded-xl px-3 sm:px-4 py-3 font-medium hover:from-sky-600 hover:to-sky-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_12px_28px_-16px_rgba(59,130,246,0.7)]"
+          className="shrink-0 bg-gradient-to-r from-sky-500 to-sky-600 text-white rounded-xl px-2.5 sm:px-4 py-3 font-medium hover:from-sky-600 hover:to-sky-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_12px_28px_-16px_rgba(59,130,246,0.7)]"
         >
           <SendIcon className="w-5 h-5" />
         </button>

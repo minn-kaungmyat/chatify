@@ -37,7 +37,7 @@ function ProfileHeader() {
   };
 
   return (
-    <div className="px-6 pt-6 pb-5 border-b border-slate-700/40">
+    <div className="px-4 sm:px-6 pt-4 sm:pt-6 pb-4 sm:pb-5 border-b border-slate-700/40">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* AVATAR */}
